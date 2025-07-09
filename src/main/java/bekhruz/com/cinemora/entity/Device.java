@@ -2,26 +2,29 @@ package bekhruz.com.cinemora.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Data
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "devices")
+public class Device {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private String firstName;
+    private String name;
 
-    private String lastName;
+    private LocalDateTime connectedDateTime;
 
-    private String email;
+    private LocalDateTime untilDateTime;
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
 }

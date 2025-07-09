@@ -1,4 +1,4 @@
 package bekhruz.com.cinemora.entity;
 
-public class MovieStreams {
+public class UserPaymentHistory {
 }

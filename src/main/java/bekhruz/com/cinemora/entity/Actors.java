@@ -24,5 +24,6 @@ public class Actors {
 
     private String bio;
 
-    private String photo_url;
+    @Column(name = "photo_url")
+    private String photoUrl;
 }

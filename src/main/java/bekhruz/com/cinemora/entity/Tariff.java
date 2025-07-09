@@ -1,5 +1,5 @@
 package bekhruz.com.cinemora.entity;
 
-public class Category {
+public class Tariff {
 
 }
