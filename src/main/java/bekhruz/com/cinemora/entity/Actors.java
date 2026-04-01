@@ -1,26 +1,19 @@
 package bekhruz.com.cinemora.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "actors")
-public class Actors {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+public class Actors extends User {
 
-    private String name;
-
-    private LocalDate birthday;
+    private LocalDate birthDate;
 
     private String bio;
 

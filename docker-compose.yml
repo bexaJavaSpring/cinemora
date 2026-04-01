@@ -14,7 +14,7 @@ services:
       MINIO_ROOT_PASSWORD: minioadmin123
     command: server /data --console-address ":9001"
   postgres:
-    image: postgres:15
+    image: postgres:17
     container_name: postgres
     restart: always
     environment:
@@ -25,18 +25,6 @@ services:
       - pg_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin
-    restart: always
-    environment:
-      PGADMIN_DEFAULT_EMAIL: bexruzizzatullayev@gmail.com
-      PGADMIN_DEFAULT_PASSWORD: bexa
-    ports:
-      - "5050:80"
-    depends_on:
-      - postgres
 volumes:
   minio_data:
   pg_data:

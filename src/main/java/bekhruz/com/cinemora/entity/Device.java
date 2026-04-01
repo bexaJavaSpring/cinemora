@@ -1,30 +1,23 @@
 package bekhruz.com.cinemora.entity;
 
+import bekhruz.com.cinemora.entity.enums.Status;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "devices")
-public class Device {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+public class Device extends Auditable {
 
     private String name;
 
     private LocalDateTime connectedDateTime;
 
     private LocalDateTime untilDateTime;
-
-    @Enumerated(EnumType.STRING)
-    private Status status;
 
 }
