@@ -2,17 +2,19 @@ package bekhruz.com.cinemora.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@SuperBuilder
 @Getter
 @Setter
 @Entity
 @Table(name = "users")
-public class User extends Auditable{
+@Inheritance(strategy = InheritanceType.JOINED)
+public class User extends Auditable {
 
     private String firstName;
 

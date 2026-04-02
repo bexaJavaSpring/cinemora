@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @Setter
 @Entity
 @Table(name = "actors")
+@PrimaryKeyJoinColumn(name = "user_id")
 public class Actors extends User {
 
     private LocalDate birthDate;

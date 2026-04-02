@@ -1,9 +1,10 @@
-version: '3.7'
+# version: field removed — obsolete in Compose v2+
 
 services:
   minio:
     image: quay.io/minio/minio
     container_name: minio
+    restart: always
     ports:
       - "9000:9000"
       - "9001:9001"
@@ -13,6 +14,14 @@ services:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin123
     command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    networks:
+      - cinemora-net
+
   postgres:
     image: postgres:17
     container_name: postgres
@@ -20,12 +29,44 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: bexa
-      POSTGRES_DB: postgres
+      POSTGRES_DB: cinemora_db
     volumes:
       - pg_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d cinemora_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - cinemora-net
+
+  app:
+    build: .
+    container_name: cinemora
+    restart: always
+    ports:
+      - "9999:9999"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/cinemora_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: bexa
+      MINIO_URL: http://minio:9000
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin123
+    networks:
+      - cinemora-net
+
 volumes:
   minio_data:
   pg_data:
 
+networks:
+  cinemora-net:
+    driver: bridge
