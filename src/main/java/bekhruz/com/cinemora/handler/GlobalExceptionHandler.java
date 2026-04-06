@@ -11,9 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -29,14 +26,6 @@ import java.util.Objects;
 public class GlobalExceptionHandler {
 
     private final Translator translator;
-
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException ex) {
-        String message = getLastCause(ex);
-        log.error(message, ex);
-        return new ResponseEntity<>(new ResponseDto<>(ResponseDto.States.ERROR, 403, message),
-                HttpStatus.FORBIDDEN);
-    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleError(final MethodArgumentNotValidException ex) {
@@ -54,13 +43,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(Map.of("message", errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<?> handleBadCredentialsException(final BadCredentialsException ex) {
-        String message = getLastCause(ex);
-        log.error(message, ex);
-        return new ResponseEntity<>(new ResponseDto<>(ResponseDto.States.ERROR, 401, message),
-                HttpStatus.UNAUTHORIZED);
-    }
 
     @ExceptionHandler(GenericNotFoundException.class)
     public ResponseEntity<?> handleGenericNotFoundException(final GenericNotFoundException e) {
@@ -81,25 +63,6 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(RecordBadRequestException.class)
-    public ResponseEntity<?> handleRecordBadRequestException(final RecordBadRequestException e) {
-        log.error("RecordBadRequestException on: {}", ErrorUtil.getStacktrace(e));
-        return new ResponseEntity<>(Map.of("message", List.of(translator.toLocale(e.getMessage()))),
-                new HttpHeaders(),
-                HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(AlreadyExistsException.class)
-    public ResponseEntity<?> handleAlreadyExistsException(final AlreadyExistsException e) {
-        log.error("AlreadyExistsException on: {}", ErrorUtil.getStacktrace(e));
-        String message = translator.toLocale(e.getMessage());
-        if (StringUtils.hasText(e.getField())) {
-            message = message + " with this: " + e.getField();
-        }
-        return new ResponseEntity<>(Map.of("message", List.of(message)), new HttpHeaders(),
-                HttpStatus.BAD_REQUEST);
-    }
-
     @ExceptionHandler({Exception.class, Throwable.class})
     public final ResponseEntity<Object> handleException(Exception ex) {
         String message = getLastCause(ex);
@@ -116,37 +79,5 @@ public class GlobalExceptionHandler {
     private String getLastCause(Throwable throwable) {
         return throwable.getCause() == null ? (throwable.getLocalizedMessage() == null ? throwable.getMessage()
                 : throwable.getLocalizedMessage()) : getLastCause(throwable.getCause());
-    }
-
-    @ExceptionHandler(GenericRuntimeException.class)
-    public final ResponseEntity<?> handleGenericRuntimeException(final GenericRuntimeException e) {
-        log.error("GenericRuntimeException on: {}", ErrorUtil.getStacktrace(e));
-        return new ResponseEntity<>(Map.of("message", List.of(translator.toLocale(e.getMessage()))),
-                new HttpHeaders(),
-                HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(AuthenticationException.class)
-    public final ResponseEntity<Object> handleAuthenticationException(AuthenticationException ex) {
-        String message = getLastCause(ex);
-        log.error(message, ex);
-        return new ResponseEntity<>(new ResponseDto<>(ResponseDto.States.ERROR, 401, message),
-                HttpStatus.UNAUTHORIZED);
-    }
-
-    @ExceptionHandler(JWTVerificationException.class)
-    public final ResponseEntity<Object> handleJWTVerificationException(JWTVerificationException ex) {
-        log.error("JWTVerificationException on: {}", ErrorUtil.getStacktrace(ex));
-        return new ResponseEntity<>(Map.of("message", List.of(translator.toLocale(ex.getMessage()))),
-                new HttpHeaders(),
-                HttpStatus.UNAUTHORIZED);
-    }
-
-    @ExceptionHandler(JWTTokenExpiredException.class)
-    public final ResponseEntity<Object> handleJWTTokenExpiredException(JWTTokenExpiredException ex) {
-        log.error("JWTTokenExpiredException on: {}", ErrorUtil.getStacktrace(ex));
-        return new ResponseEntity<>(Map.of("message", List.of(translator.toLocale(ex.getMessage()))),
-                new HttpHeaders(),
-                HttpStatus.UNAUTHORIZED);
     }
 }

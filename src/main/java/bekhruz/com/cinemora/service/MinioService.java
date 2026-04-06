@@ -6,11 +6,13 @@ import bekhruz.com.cinemora.repository.FileEntityRepository;
 import bekhruz.com.cinemora.util.MD5Decode;
 import io.minio.*;
 import io.minio.errors.MinioException;
+import io.minio.http.Method;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -21,6 +23,8 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+
 import static org.apache.commons.lang3.StringUtils.leftPad;
 
 
@@ -35,9 +39,13 @@ public class MinioService {
     @Value("${project.upload.path.default-bucket}")
     private String defaultBucketName;
 
+    @Value("${root.path}")
+    private String rootPath;
+
     private final FileEntityRepository fileEntityRepository;
     private final MinioClient minioClient;
 
+    @Transactional
     public String saveFile(MultipartFile file, String originalFilename) {
         UploadedFileDetailsDto res;
         FileEntity fileEntity = new FileEntity();
@@ -48,7 +56,7 @@ public class MinioService {
         fileEntityRepository.save(fileEntity);
         String uniqueKey = MD5Decode.md5Decode(fileEntity.getId());
         uniqueKey = String.format("%s.%s", uniqueKey, StringUtils.getFilenameExtension(file.getOriginalFilename()));
-        StringBuilder wholePath = new StringBuilder();
+        StringBuilder wholePath = new StringBuilder(rootPath);
         String realWholePath = prepareUploadPath(wholePath.append(defaultUploadPath).toString());
         char lastChar = realWholePath.charAt(realWholePath.length() - 1);
         String objectName;
@@ -105,5 +113,20 @@ public class MinioService {
                 .replace("{YYYY}", String.valueOf(now.get(Calendar.YEAR)))
                 .replace("{MM}", leftPad(String.valueOf(now.get(Calendar.MONTH) + 1), 2, "0"))
                 .replace("{DD}", leftPad(String.valueOf(now.get(Calendar.DAY_OF_MONTH)), 2, "0"));
+    }
+
+    public String generatePresignedUrl(String objectName) {
+        try {
+            return minioClient.getPresignedObjectUrl(
+                    GetPresignedObjectUrlArgs.builder()
+                            .method(Method.GET)
+                            .bucket(defaultBucketName)
+                            .object(objectName)
+                            .expiry(7, TimeUnit.DAYS)
+                            .build()
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Presigned URL yaratib bo'lmadi", e);
+        }
     }
 }
