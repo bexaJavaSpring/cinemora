@@ -1,5 +1,4 @@
 package bekhruz.com.cinemora.dto;
 
-public class ResourceFileDto {
-
+public record ResourceFileDto(String path) {
 }

@@ -1,6 +1,5 @@
 package bekhruz.com.cinemora.util;
 
-import org.hibernate.annotations.Comment;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 

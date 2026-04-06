@@ -29,4 +29,6 @@ public class FileController {
                                                                @RequestParam(required = false, name = "minHeight") Integer minHeight) {
         return new ResponseEntity<>(fileService.storeFile(file, minWidth, minHeight), HttpStatus.OK);
     }
+
+
 }
