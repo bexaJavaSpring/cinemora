@@ -16,8 +16,8 @@ public class SwaggerConfig {
     @Bean
     public GroupedOpenApi api() {
         return GroupedOpenApi.builder()
-                .group("all-api")
-                .packagesToScan("bekruz.com.cinemora.controller")
+                .group("api")
+                .pathsToMatch("/**")
                 .build();
     }
 

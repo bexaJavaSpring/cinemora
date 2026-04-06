@@ -122,7 +122,7 @@ public class MinioService {
                             .method(Method.GET)
                             .bucket(defaultBucketName)
                             .object(objectName)
-                            .expiry(7, TimeUnit.DAYS)
+                            .expiry(7, TimeUnit.HOURS)
                             .build()
             );
         } catch (Exception e) {
