@@ -17,6 +17,5 @@ public class Genres extends Auditable {
 
     private String name;
 
-    @ManyToMany(mappedBy = "genres")
-    private Set<Movie> movies = new HashSet<>();
+    private String slug;
 }

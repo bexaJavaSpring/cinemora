@@ -22,5 +22,7 @@ public class User extends Auditable {
 
     private String email;
 
+    private long age;
 
+    private String phone;
 }

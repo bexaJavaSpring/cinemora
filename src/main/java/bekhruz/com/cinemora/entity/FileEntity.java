@@ -26,11 +26,15 @@ public class FileEntity extends Auditable implements Serializable {
     private String extension;
 
     private Long size;
+
     private String contentType;
+
     private String path;
 
     private String etag;
+
     private String objectName;
+
     private String bucketName;
 
     public String getFileName() {

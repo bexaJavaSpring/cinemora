@@ -11,13 +11,13 @@ import lombok.*;
 @Table(name = "comments")
 public class Comment extends Auditable {
 
-    private String content;
+    private String contentTitle;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "movie_id", referencedColumnName = "id")
-    private Movie movie;
+    @JoinColumn(name = "content_id", referencedColumnName = "id")
+    private Content content;
 }

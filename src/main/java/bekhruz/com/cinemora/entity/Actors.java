@@ -16,7 +16,7 @@ public class Actors extends User {
 
     private LocalDate birthDate;
 
-    private String bio;
+    private String fullName;
 
     @Column(name = "photo_url")
     private String photoUrl;
