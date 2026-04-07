@@ -1,11 +1,10 @@
 package bekhruz.com.cinemora.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,9 +12,23 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "seasons")
+@Builder
 public class Season extends Auditable {
 
     private String title;
 
     private String seasonNumber;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "content_id", nullable = false)
+    private Content content;
+
+    private Integer releaseYear;
+
+    @Column(length = 500)
+    private String posterUrl;
+
+    @OneToMany(mappedBy = "season", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<Episode> episodes = new ArrayList<>();
 }

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -16,13 +18,51 @@ import java.util.UUID;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class User extends Auditable {
 
-    private String firstName;
-
-    private String lastName;
-
+    @Column(unique = true, length = 100)
     private String email;
 
-    private long age;
+    @Column(unique = true, length = 50)
+    private String username;
 
-    private String phone;
+    @Column(length = 300)
+    private String passwordHash;
+
+    @Column(length = 150)
+    private String fullName;
+
+    @Column(length = 500)
+    private String avatarUrl;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private UserRole role;             // USER, ADMIN, MODERATOR
+
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
+    private Boolean isActive;
+
+    // OAuth (Google, Telegram orqali kirish)
+    @Column(length = 100)
+    private String googleId;
+
+    @Column(length = 100)
+    private String telegramId;
+
+    // Sevimlilar
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "user_favorites",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "content_id")
+    )
+    @Builder.Default
+    private List<Content> favorites = new ArrayList<>();
+
+    // Ko'rish tarixi
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<WatchHistory> watchHistory = new ArrayList<>();
+
+    public enum UserRole {
+        USER, MODERATOR, ADMIN
+    }
 }

@@ -14,7 +14,9 @@ import java.time.LocalDate;
 @PrimaryKeyJoinColumn(name = "user_id")
 public class Actors extends User {
 
-    private LocalDate birthDate;
+    private String birthYear;
+
+    private String nationality;
 
     private String fullName;
 

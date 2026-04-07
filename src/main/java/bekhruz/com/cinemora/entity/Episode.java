@@ -1,13 +1,10 @@
 package bekhruz.com.cinemora.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -15,21 +12,35 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "episodes")
+@Builder
 public class Episode extends Auditable {
 
-    @ManyToOne
-    @JoinColumn(name = "content_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "content_id", nullable = false)
     private Content content;
 
-    @ManyToOne
-    @JoinColumn(name = "season_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "season_id", nullable = false)
     private Season season;
 
-    private String episodeNumber;
+    @Column(nullable = false)
+    private Integer episodeNumber;     // 1, 2, 3...
 
-    private String title;
+    @Column(length = 200)
+    private String title;              // "Birinchi epizod"
 
-    private int durationMin;
+    @Column(columnDefinition = "TEXT")
+    private String description;
 
-    private String thumbNailUrl;
+    private Integer durationMin;
+
+    @Column(length = 500)
+    private String thumbnailUrl;
+
+    @Column(nullable = false, columnDefinition = "BIGINT DEFAULT 0")
+    private Long viewCount;
+
+    @OneToMany(mappedBy = "episode", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<VideoSource> videoSources = new ArrayList<>();
 }
