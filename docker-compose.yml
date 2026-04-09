@@ -1,4 +1,5 @@
 # version: field removed — obsolete in Compose v2+
+version: '3.8'
 
 services:
   minio:
