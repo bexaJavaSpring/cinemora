@@ -4,4 +4,5 @@ import bekhruz.com.cinemora.entity.FileEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FileEntityRepository extends JpaRepository<FileEntity, Long> {
+    FileEntity findByObjectName(String objectName);
 }

@@ -10,7 +10,8 @@ import io.minio.http.Method;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -19,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
@@ -127,6 +129,58 @@ public class MinioService {
             );
         } catch (Exception e) {
             throw new RuntimeException("Presigned URL yaratib bo'lmadi", e);
+        }
+    }
+
+
+    public ResponseEntity<ByteArrayResource> downloadFile(String objectName) {
+        FileEntity fileEntity = fileEntityRepository.findByObjectName(objectName);
+        try (InputStream stream = minioClient.getObject(
+                GetObjectArgs.builder()
+                        .bucket(defaultBucketName)
+                        .object(objectName)
+                        .build()
+        )) {
+            byte[] data = stream.readAllBytes();
+            HttpHeaders headers = new HttpHeaders();
+            ContentDisposition contentDisposition = ContentDisposition.builder("attachment")
+                    .filename(fileEntity.getFileName(), StandardCharsets.UTF_8)
+                    .build();
+            headers.setContentDisposition(contentDisposition);
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(fileEntity.getContentType()))
+                    .headers(headers)
+                    .body(new ByteArrayResource(data));
+
+        } catch (Exception e) {
+            throw new RuntimeException("MinIO dan file ni yuklab bo'lmadi", e);
+        }
+    }
+
+    public ResponseEntity<ByteArrayResource> viewFile(String objectName) {
+        FileEntity fileEntity = fileEntityRepository.findByObjectName(objectName);
+        try (InputStream stream = minioClient.getObject(
+                GetObjectArgs.builder()
+                        .bucket(defaultBucketName)
+                        .object(objectName)
+                        .build()
+        )) {
+            byte[] data = stream.readAllBytes();
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Cache-Control", "public, max-age=31536000");
+
+            ContentDisposition contentDisposition = ContentDisposition.builder("inline")
+                    .filename(fileEntity.getFileName(), StandardCharsets.UTF_8)
+                    .build();
+            headers.setContentDisposition(contentDisposition);
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(fileEntity.getContentType()))
+                    .headers(headers)
+                    .body(new ByteArrayResource(data));
+        } catch (Exception e) {
+            throw new RuntimeException("File ni ko'rib bo'lmadi", e);
         }
     }
 }

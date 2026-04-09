@@ -5,6 +5,7 @@ import bekhruz.com.cinemora.dto.ResourceFileDto;
 import bekhruz.com.cinemora.service.FileService;
 import bekhruz.com.cinemora.service.MinioService;
 import bekhruz.com.cinemora.util.ApiConstants;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -34,5 +35,15 @@ public class FileController {
     public ResponseEntity<DataDto<String>> getPresignedUrl(@RequestParam String objectName) {
         String url = minioService.generatePresignedUrl(objectName);
         return ResponseEntity.ok(new DataDto<>(url));
+    }
+
+    @GetMapping("/download")
+    public ResponseEntity<ByteArrayResource> downloadFile(@RequestParam String name) {
+        return minioService.downloadFile(name);
+    }
+
+    @GetMapping("/view")
+    public ResponseEntity<ByteArrayResource> viewFile(@RequestParam String name) {
+        return minioService.viewFile(name);
     }
 }
