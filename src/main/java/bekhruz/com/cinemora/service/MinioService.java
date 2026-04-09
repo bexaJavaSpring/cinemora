@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -181,6 +182,56 @@ public class MinioService {
                     .body(new ByteArrayResource(data));
         } catch (Exception e) {
             throw new RuntimeException("File ni ko'rib bo'lmadi", e);
+        }
+    }
+
+    public ResponseEntity<InputStreamResource> video(String objectName, String rangeHeader) {
+        FileEntity fileEntity = fileEntityRepository.findByObjectName(objectName);
+
+        try {
+            StatObjectResponse stat = minioClient.statObject(
+                    StatObjectArgs.builder()
+                            .bucket("my-bucket")
+                            .object(objectName)
+                            .build()
+            );
+
+            long fileSize = stat.size();
+
+            long start = 0;
+            long end = fileSize - 1;
+
+            if (rangeHeader != null && rangeHeader.startsWith("bytes=")) {
+                String[] ranges = rangeHeader.substring(6).split("-");
+                start = Long.parseLong(ranges[0]);
+                if (ranges.length > 1 && !ranges[1].isEmpty()) {
+                    end = Long.parseLong(ranges[1]);
+                }
+            }
+
+            long contentLength = end - start + 1;
+
+            InputStream stream = minioClient.getObject(
+                    GetObjectArgs.builder()
+                            .bucket("my-bucket")
+                            .object(objectName)
+                            .offset(start)
+                            .length(contentLength)
+                            .build()
+            );
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType(fileEntity.getContentType()));
+            headers.setContentLength(contentLength);
+            headers.add("Accept-Ranges", "bytes");
+            headers.add("Content-Range", "bytes " + start + "-" + end + "/" + fileSize);
+
+            return ResponseEntity.status(rangeHeader == null ? 200 : 206)
+                    .headers(headers)
+                    .body(new InputStreamResource(stream));
+
+        } catch (Exception e) {
+            throw new RuntimeException("Video stream qilishda xatolik", e);
         }
     }
 }

@@ -6,11 +6,13 @@ import bekhruz.com.cinemora.service.FileService;
 import bekhruz.com.cinemora.service.MinioService;
 import bekhruz.com.cinemora.util.ApiConstants;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 @RestController
 @RequestMapping(ApiConstants.API_VERSION + "/files")
@@ -45,5 +47,13 @@ public class FileController {
     @GetMapping("/view")
     public ResponseEntity<ByteArrayResource> viewFile(@RequestParam String name) {
         return minioService.viewFile(name);
+    }
+
+    @GetMapping("/video")
+    public ResponseEntity<InputStreamResource> streamVideo(
+            @RequestParam String name,
+            @RequestHeader(value = "Range", required = false) String rangeHeader
+    ) {
+        return minioService.video(name, rangeHeader);
     }
 }
