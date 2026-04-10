@@ -1,7 +1,7 @@
 package bekhruz.com.cinemora.service;
 
-import bekhruz.com.cinemora.dto.DataDto;
-import bekhruz.com.cinemora.dto.ResourceFileDto;
+import bekhruz.com.cinemora.dto.response.DataDto;
+import bekhruz.com.cinemora.dto.file.ResourceFileDto;
 import bekhruz.com.cinemora.exception.FileStorageException;
 import bekhruz.com.cinemora.exception.GenericNotFoundException;
 import bekhruz.com.cinemora.util.BaseUtils;

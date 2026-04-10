@@ -1,0 +1,675 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1775821550793-1" author="lenovo" runOnChange="false">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="actors"/>
+            </not>
+        </preConditions>
+        <createTable tableName="actors">
+            <column name="user_id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_actors"/>
+            </column>
+            <column name="birth_year" type="VARCHAR(255)"/>
+            <column name="nationality" type="VARCHAR(255)"/>
+            <column name="full_name" type="VARCHAR(255)"/>
+            <column name="photo_url" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775821550793-2" author="lenovo" runOnChange="false">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="comments"/>
+            </not>
+        </preConditions>
+        <createTable tableName="comments">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_comments"/>
+            </column>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="user_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="parent_id" type="UUID"/>
+            <column name="text" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueBoolean="true" name="is_active" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="likes_count" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775821550793-3" author="lenovo" runOnChange="false">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="content_actors"/>
+            </not>
+        </preConditions>
+        <createTable tableName="content_actors">
+            <column name="actor_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775821550793-4" author="lenovo" runOnChange="false">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="content_genres"/>
+            </not>
+        </preConditions>
+        <createTable tableName="content_genres">
+            <column name="content_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="genre_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775821550793-5" author="lenovo" runOnChange="false">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="content_type"/>
+            </not>
+        </preConditions>
+        <createTable tableName="content_type">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_content_type"/>
+            </column>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="slug" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775821550793-6" author="lenovo" runOnChange="false">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="contents"/>
+            </not>
+        </preConditions>
+        <createTable tableName="contents">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_contents"/>
+            </column>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="title" type="VARCHAR(255)"/>
+            <column name="slug" type="VARCHAR(255)"/>
+            <column name="original_title" type="VARCHAR(255)"/>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="poster_url" type="VARCHAR(255)"/>
+            <column name="back_drop_url" type="VARCHAR(255)"/>
+            <column name="release_year" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="imdb_rating" type="FLOAT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="kinopoisk_rating" type="FLOAT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="duration_min" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueBoolean="false" name="is_featured" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueBoolean="false" name="is_top" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="view_count" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content_type_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="country_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775821550793-7" author="lenovo" runOnChange="false">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="countries"/>
+            </not>
+        </preConditions>
+        <createTable tableName="countries">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_countries"/>
+            </column>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="code" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775821550793-8" author="lenovo" runOnChange="false">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="devices"/>
+            </not>
+        </preConditions>
+        <createTable tableName="devices">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_devices"/>
+            </column>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="connected_date_time" type="DATETIME"/>
+            <column name="until_date_time" type="DATETIME"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775821550793-9" author="lenovo" runOnChange="false">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="episodes"/>
+            </not>
+        </preConditions>
+        <createTable tableName="episodes">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_episodes"/>
+            </column>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="content_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="season_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="episode_number" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR(200)"/>
+            <column name="description" type="TEXT"/>
+            <column name="duration_min" type="INT"/>
+            <column name="thumbnail_url" type="VARCHAR(500)"/>
+            <column defaultValueNumeric="0" name="view_count" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775821550793-10" author="lenovo" runOnChange="false">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="file_entity"/>
+            </not>
+        </preConditions>
+        <createTable tableName="file_entity">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_file_entity"/>
+            </column>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="name" type="VARCHAR(500)"/>
+            <column name="extension" type="VARCHAR(25)"/>
+            <column name="size" type="BIGINT"/>
+            <column name="content_type" type="VARCHAR(255)"/>
+            <column name="path" type="VARCHAR(255)"/>
+            <column name="etag" type="VARCHAR(255)"/>
+            <column name="object_name" type="VARCHAR(255)"/>
+            <column name="bucket_name" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775821550793-11" author="lenovo" runOnChange="false">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="genres"/>
+            </not>
+        </preConditions>
+        <createTable tableName="genres">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_genres"/>
+            </column>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="slug" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775821550793-12" author="lenovo" runOnChange="false">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="payment"/>
+            </not>
+        </preConditions>
+        <createTable tableName="payment">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_payment"/>
+            </column>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="card_number" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775821550793-13" author="lenovo" runOnChange="false">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="ratings"/>
+            </not>
+        </preConditions>
+        <createTable tableName="ratings">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_ratings"/>
+            </column>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="user_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="score" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775821550793-14" author="lenovo" runOnChange="false">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="resource"/>
+            </not>
+        </preConditions>
+        <createTable tableName="resource">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_resource"/>
+            </column>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="object_id" type="VARCHAR(255)"/>
+            <column name="content_type" type="VARCHAR(255)"/>
+            <column name="size" type="BIGINT"/>
+            <column name="view_url" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775821550793-15" author="lenovo" runOnChange="false">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="seasons"/>
+            </not>
+        </preConditions>
+        <createTable tableName="seasons">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_seasons"/>
+            </column>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="title" type="VARCHAR(255)"/>
+            <column name="season_number" type="VARCHAR(255)"/>
+            <column name="content_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="release_year" type="INT"/>
+            <column name="poster_url" type="VARCHAR(500)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775821550793-16" author="lenovo" runOnChange="false">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="session_users"/>
+            </not>
+        </preConditions>
+        <createTable tableName="session_users">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_session_users"/>
+            </column>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="user_id" type="UUID"/>
+            <column name="access_token" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="refresh_token" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775821550793-17" author="lenovo" runOnChange="false">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="sliders"/>
+            </not>
+        </preConditions>
+        <createTable tableName="sliders">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_sliders"/>
+            </column>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="title" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(500)"/>
+            <column name="image_url" type="VARCHAR(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content_id" type="UUID"/>
+            <column name="external_url" type="VARCHAR(500)"/>
+            <column defaultValueBoolean="true" name="is_active" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="sort_order" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775821550793-18" author="lenovo" runOnChange="false">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="user_favorites"/>
+            </not>
+        </preConditions>
+        <createTable tableName="user_favorites">
+            <column name="content_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775821550793-19" author="lenovo" runOnChange="false">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="users"/>
+            </not>
+        </preConditions>
+        <createTable tableName="users">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_users"/>
+            </column>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="email" type="VARCHAR(100)"/>
+            <column name="username" type="VARCHAR(50)"/>
+            <column name="password" type="VARCHAR(8)"/>
+            <column name="full_name" type="VARCHAR(150)"/>
+            <column name="avatar_url" type="VARCHAR(500)"/>
+            <column name="role" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueBoolean="true" name="is_active" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="google_id" type="VARCHAR(100)"/>
+            <column name="telegram_id" type="VARCHAR(100)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775821550793-20" author="lenovo" runOnChange="false">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="video_sources"/>
+            </not>
+        </preConditions>
+        <createTable tableName="video_sources">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_video_sources"/>
+            </column>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="content_id" type="UUID"/>
+            <column name="episode_id" type="UUID"/>
+            <column name="quality" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="source_url" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="source_type" type="VARCHAR(20)"/>
+            <column name="translator" type="VARCHAR(100)"/>
+            <column name="language" type="VARCHAR(10)"/>
+            <column defaultValueBoolean="true" name="is_active" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="sort_order" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775821550793-21" author="lenovo" runOnChange="false">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="watch_history"/>
+            </not>
+        </preConditions>
+        <createTable tableName="watch_history">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_watch_history"/>
+            </column>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="user_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="episode_id" type="UUID"/>
+            <column defaultValueNumeric="0" name="stopped_at" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueBoolean="false" name="is_completed" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1775821550793-22" author="lenovo" >
+        <addUniqueConstraint columnNames="user_id, content_id" constraintName="uc_0675433411f625ec55713a178"
+                             tableName="ratings"/>
+    </changeSet>
+    <changeSet id="1775821550793-23" author="lenovo">
+        <addUniqueConstraint columnNames="user_id" constraintName="uc_session_users_user" tableName="session_users"/>
+    </changeSet>
+    <changeSet id="1775821550793-24" author="lenovo">
+        <addUniqueConstraint columnNames="email" constraintName="uc_users_email" tableName="users"/>
+    </changeSet>
+    <changeSet id="1775821550793-25" author="lenovo">
+        <addUniqueConstraint columnNames="password" constraintName="uc_users_password" tableName="users"/>
+    </changeSet>
+    <changeSet id="1775821550793-26" author="lenovo">
+        <addUniqueConstraint columnNames="username" constraintName="uc_users_username" tableName="users"/>
+    </changeSet>
+    <changeSet id="1775821550793-27" author="lenovo">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="actors" constraintName="FK_ACTORS_ON_USER"
+                                 referencedColumnNames="id" referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1775821550793-28" author="lenovo">
+        <addForeignKeyConstraint baseColumnNames="content_id" baseTableName="comments"
+                                 constraintName="FK_COMMENTS_ON_CONTENT" referencedColumnNames="id"
+                                 referencedTableName="contents"/>
+    </changeSet>
+    <changeSet id="1775821550793-29" author="lenovo">
+        <addForeignKeyConstraint baseColumnNames="parent_id" baseTableName="comments"
+                                 constraintName="FK_COMMENTS_ON_PARENT" referencedColumnNames="id"
+                                 referencedTableName="comments"/>
+    </changeSet>
+    <changeSet id="1775821550793-30" author="lenovo">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="comments" constraintName="FK_COMMENTS_ON_USER"
+                                 referencedColumnNames="id" referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1775821550793-31" author="lenovo">
+        <addForeignKeyConstraint baseColumnNames="content_type_id" baseTableName="contents"
+                                 constraintName="FK_CONTENTS_ON_CONTENT_TYPE" referencedColumnNames="id"
+                                 referencedTableName="content_type"/>
+    </changeSet>
+    <changeSet id="1775821550793-32" author="lenovo">
+        <addForeignKeyConstraint baseColumnNames="country_id" baseTableName="contents"
+                                 constraintName="FK_CONTENTS_ON_COUNTRY" referencedColumnNames="id"
+                                 referencedTableName="countries"/>
+    </changeSet>
+    <changeSet id="1775821550793-33" author="lenovo">
+        <addForeignKeyConstraint baseColumnNames="content_id" baseTableName="episodes"
+                                 constraintName="FK_EPISODES_ON_CONTENT" referencedColumnNames="id"
+                                 referencedTableName="contents"/>
+    </changeSet>
+    <changeSet id="1775821550793-34" author="lenovo">
+        <addForeignKeyConstraint baseColumnNames="season_id" baseTableName="episodes"
+                                 constraintName="FK_EPISODES_ON_SEASON" referencedColumnNames="id"
+                                 referencedTableName="seasons"/>
+    </changeSet>
+    <changeSet id="1775821550793-35" author="lenovo">
+        <addForeignKeyConstraint baseColumnNames="content_id" baseTableName="ratings"
+                                 constraintName="FK_RATINGS_ON_CONTENT" referencedColumnNames="id"
+                                 referencedTableName="contents"/>
+    </changeSet>
+    <changeSet id="1775821550793-36" author="lenovo">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="ratings" constraintName="FK_RATINGS_ON_USER"
+                                 referencedColumnNames="id" referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1775821550793-37" author="lenovo">
+        <addForeignKeyConstraint baseColumnNames="content_id" baseTableName="seasons"
+                                 constraintName="FK_SEASONS_ON_CONTENT" referencedColumnNames="id"
+                                 referencedTableName="contents"/>
+    </changeSet>
+    <changeSet id="1775821550793-38" author="lenovo">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="session_users"
+                                 constraintName="FK_SESSION_USERS_ON_USER" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1775821550793-39" author="lenovo">
+        <addForeignKeyConstraint baseColumnNames="content_id" baseTableName="sliders"
+                                 constraintName="FK_SLIDERS_ON_CONTENT" referencedColumnNames="id"
+                                 referencedTableName="contents"/>
+    </changeSet>
+    <changeSet id="1775821550793-40" author="lenovo">
+        <addForeignKeyConstraint baseColumnNames="content_id" baseTableName="video_sources"
+                                 constraintName="FK_VIDEO_SOURCES_ON_CONTENT" referencedColumnNames="id"
+                                 referencedTableName="contents"/>
+    </changeSet>
+    <changeSet id="1775821550793-41" author="lenovo">
+        <addForeignKeyConstraint baseColumnNames="episode_id" baseTableName="video_sources"
+                                 constraintName="FK_VIDEO_SOURCES_ON_EPISODE" referencedColumnNames="id"
+                                 referencedTableName="episodes"/>
+    </changeSet>
+    <changeSet id="1775821550793-42" author="lenovo">
+        <addForeignKeyConstraint baseColumnNames="content_id" baseTableName="watch_history"
+                                 constraintName="FK_WATCH_HISTORY_ON_CONTENT" referencedColumnNames="id"
+                                 referencedTableName="contents"/>
+    </changeSet>
+    <changeSet id="1775821550793-43" author="lenovo">
+        <addForeignKeyConstraint baseColumnNames="episode_id" baseTableName="watch_history"
+                                 constraintName="FK_WATCH_HISTORY_ON_EPISODE" referencedColumnNames="id"
+                                 referencedTableName="episodes"/>
+    </changeSet>
+    <changeSet id="1775821550793-44" author="lenovo">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="watch_history"
+                                 constraintName="FK_WATCH_HISTORY_ON_USER" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1775821550793-45" author="lenovo">
+        <addForeignKeyConstraint baseColumnNames="actor_id" baseTableName="content_actors"
+                                 constraintName="fk_conact_on_actors" referencedColumnNames="user_id"
+                                 referencedTableName="actors"/>
+    </changeSet>
+    <changeSet id="1775821550793-46" author="lenovo">
+        <addForeignKeyConstraint baseColumnNames="content_id" baseTableName="content_actors"
+                                 constraintName="fk_conact_on_content" referencedColumnNames="id"
+                                 referencedTableName="contents"/>
+    </changeSet>
+    <changeSet id="1775821550793-47" author="lenovo">
+        <addForeignKeyConstraint baseColumnNames="content_id" baseTableName="content_genres"
+                                 constraintName="fk_congen_on_content" referencedColumnNames="id"
+                                 referencedTableName="contents"/>
+    </changeSet>
+    <changeSet id="1775821550793-48" author="lenovo">
+        <addForeignKeyConstraint baseColumnNames="genre_id" baseTableName="content_genres"
+                                 constraintName="fk_congen_on_genres" referencedColumnNames="id"
+                                 referencedTableName="genres"/>
+    </changeSet>
+    <changeSet id="1775821550793-49" author="lenovo">
+        <addForeignKeyConstraint baseColumnNames="content_id" baseTableName="user_favorites"
+                                 constraintName="fk_usefav_on_content" referencedColumnNames="id"
+                                 referencedTableName="contents"/>
+    </changeSet>
+    <changeSet id="1775821550793-50" author="lenovo">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_favorites"
+                                 constraintName="fk_usefav_on_user" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+
+</databaseChangeLog>

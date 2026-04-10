@@ -1,21 +1,21 @@
 package bekhruz.com.cinemora.controller;
 
-import bekhruz.com.cinemora.dto.DataDto;
-import bekhruz.com.cinemora.dto.ResourceFileDto;
+import bekhruz.com.cinemora.dto.file.ResourceFileDto;
+import bekhruz.com.cinemora.dto.response.DataDto;
 import bekhruz.com.cinemora.service.FileService;
 import bekhruz.com.cinemora.service.MinioService;
-import bekhruz.com.cinemora.util.ApiConstants;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 @RestController
-@RequestMapping(ApiConstants.API_VERSION + "/files")
+@RequestMapping("/files")
+@PreAuthorize("hasRole('ADMIN')")
 public class FileController {
 
     private final FileService fileService;

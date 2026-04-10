@@ -1,4 +1,4 @@
-package bekhruz.com.cinemora.dto;
+package bekhruz.com.cinemora.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

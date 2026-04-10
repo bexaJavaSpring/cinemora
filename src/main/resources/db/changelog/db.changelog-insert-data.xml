@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="1775822787456-1" author="bekhruzbey">
+        <insert tableName="users">
+            <column name="id" valueComputed="gen_random_uuid()"/>
+            <column name="full_name" value="Izzatullayev Behruz Qahramon o'g'li"/>
+            <column name="email" value="bexruzizzatullayev@gmail.com"/>
+            <column name="username" value="bekhruz1407"/>
+            <column name="password" value="$2a$10$HHB688miZ6/jjL2Fqy7w2.AdY4284UMCKX64PIlEpwpGNiQ725vd2"/>
+            <column name="role" value="ADMIN"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

@@ -1,6 +1,6 @@
 package bekhruz.com.cinemora.service;
 
-import bekhruz.com.cinemora.dto.UploadedFileDetailsDto;
+import bekhruz.com.cinemora.dto.file.UploadedFileDetailsDto;
 import bekhruz.com.cinemora.entity.FileEntity;
 import bekhruz.com.cinemora.repository.FileEntityRepository;
 import bekhruz.com.cinemora.util.MD5Decode;

@@ -24,8 +24,8 @@ public class User extends Auditable {
     @Column(unique = true, length = 50)
     private String username;
 
-    @Column(length = 300)
-    private String passwordHash;
+    @Column(unique = true, length = 8)
+    private String password;
 
     @Column(length = 150)
     private String fullName;

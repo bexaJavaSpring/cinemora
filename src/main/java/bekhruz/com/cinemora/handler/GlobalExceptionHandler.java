@@ -1,7 +1,7 @@
 package bekhruz.com.cinemora.handler;
 
 
-import bekhruz.com.cinemora.dto.ResponseDto;
+import bekhruz.com.cinemora.dto.response.ResponseDto;
 import bekhruz.com.cinemora.exception.GenericNotFoundException;
 import bekhruz.com.cinemora.exception.ValidationException;
 import bekhruz.com.cinemora.util.ErrorUtil;
