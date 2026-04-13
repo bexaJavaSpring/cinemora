@@ -2,10 +2,7 @@ package bekhruz.com.cinemora.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,6 +10,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "countries")
+@Builder
 public class Country extends Auditable {
 
     private String name;

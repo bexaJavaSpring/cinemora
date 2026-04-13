@@ -1,16 +1,14 @@
 package bekhruz.com.cinemora.entity;
 
 import jakarta.persistence.Entity;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity(name = "content_type")
+@Builder
 public class ContentType extends Auditable {
 
     private String name;

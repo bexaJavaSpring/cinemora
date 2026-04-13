@@ -1,11 +1,8 @@
 package bekhruz.com.cinemora.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.*;
-
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,6 +10,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "genres")
+@Builder
 public class Genres extends Auditable {
 
     private String name;

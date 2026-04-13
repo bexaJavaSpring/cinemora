@@ -2,6 +2,7 @@ package bekhruz.com.cinemora.handler;
 
 
 import bekhruz.com.cinemora.dto.response.ResponseDto;
+import bekhruz.com.cinemora.exception.CustomAccessDeniedException;
 import bekhruz.com.cinemora.exception.GenericNotFoundException;
 import bekhruz.com.cinemora.exception.ValidationException;
 import bekhruz.com.cinemora.util.ErrorUtil;
@@ -61,6 +62,14 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(Map.of("message", List.of(translator.toLocale(e.getMessage()))),
                 new HttpHeaders(),
                 HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(CustomAccessDeniedException.class)
+    public ResponseEntity<?> handleCustomAccessDeniedException(final CustomAccessDeniedException e) {
+        log.error("CustomAccessDeniedException on: {}", ErrorUtil.getStacktrace(e));
+        return new ResponseEntity<>(Map.of("message", List.of(translator.toLocale(e.getMessage()))),
+                new HttpHeaders(),
+                HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler({Exception.class, Throwable.class})
