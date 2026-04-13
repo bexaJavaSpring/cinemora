@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,7 +14,7 @@ import lombok.*;
 @Entity
 @Table(name = "actors")
 @PrimaryKeyJoinColumn(name = "user_id")
-@Builder
+@SuperBuilder
 public class Actors extends User {
 
     private String birthYear;
