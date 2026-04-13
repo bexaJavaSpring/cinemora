@@ -16,7 +16,7 @@ public class CommentResponse {
     private String text;
     private Integer likesCount;
     private Boolean isActive;
-    private UUID   parentId;        // null = parent comment
-    private List<CommentResponse> replies;  // nested replies
+    private UUID   parentId;
+    private List<CommentResponse> replies;
     private LocalDateTime createdAt;
 }

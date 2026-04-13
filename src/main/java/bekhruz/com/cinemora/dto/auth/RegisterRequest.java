@@ -19,5 +19,5 @@ public class RegisterRequest {
     @Size(min = 6, message = "Parol kamida 6 ta belgi bo'lishi kerak")
     private String password;
 
-    private String fullName;   // ixtiyoriy
+    private String fullName;
 }

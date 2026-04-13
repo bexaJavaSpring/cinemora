@@ -44,7 +44,7 @@ public class EpisodeController {
     // multipart/form-data:
     //   - data (JSON): { title, episodeNumber, contentId, seasonId, durationMin }
     //   - thumbnail (file, ixtiyoriy): epizod muqovasi → Minio ga ketadi
-    @PostMapping(consumes = "multipart/form-data")
+    @PostMapping
     public ResponseEntity<EpisodeResponse> create(
             @RequestPart("data") EpisodeRequest request
     ) {
@@ -53,7 +53,7 @@ public class EpisodeController {
 
     // ── 5. EPIZOD TAHRIRLASH (Admin) ──────────────────────
     // PUT /api/v1/episodes/10
-    @PutMapping(value = "/{id}", consumes = "multipart/form-data")
+    @PutMapping(value = "/{id}")
     public ResponseEntity<EpisodeResponse> update(
             @PathVariable UUID id,
             @RequestPart("data") EpisodeRequest request

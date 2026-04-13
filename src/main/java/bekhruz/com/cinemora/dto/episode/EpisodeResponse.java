@@ -14,6 +14,6 @@ public class EpisodeResponse {
     private String title;
     private String description;
     private Integer durationMin;
-    private String thumbnailUrl;   // objectName — frontend: MINIO_URL + "/" + thumbnailUrl
+    private String thumbnailUrl;
     private Long viewCount;
 }

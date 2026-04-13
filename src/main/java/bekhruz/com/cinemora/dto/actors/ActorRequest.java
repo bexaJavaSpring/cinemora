@@ -11,7 +11,7 @@ public class ActorRequest {
     private String fullName;     // "Leonardo DiCaprio"
 
     @Size(max = 500, message = "URL 500 belgidan oshmasin")
-    private String photoUrl;     // Minio object name
+    private String photoUrl;
 
     private String birthYear;    // "1974"
 
