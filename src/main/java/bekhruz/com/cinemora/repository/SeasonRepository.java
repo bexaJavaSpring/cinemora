@@ -10,5 +10,5 @@ public interface SeasonRepository extends JpaRepository<Season, UUID> {
 
     List<Season> findByContent_IdOrderBySeasonNumberAsc(UUID contentId);
 
-    boolean existsByContent_IdAndSeasonNumber(UUID contentId, Integer seasonNumber);
+    boolean existsByContentIdAndSeasonNumber(UUID contentId, String seasonNumber);
 }

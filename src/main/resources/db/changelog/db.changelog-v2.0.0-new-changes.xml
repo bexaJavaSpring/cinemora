@@ -7,4 +7,282 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
 
+    <changeSet id="1776141521332-1" author="bekhruzbey">
+        <createTable tableName="tariffs">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_tariffs"/>
+            </column>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="name" type="varchar(100)"/>
+            <column name="description" type="text"/>
+            <column name="price_monthly" type="DECIMAL(12, 2)" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price_six_month" type="DECIMAL(12, 2)" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="price_yearly" type="DECIMAL(12, 2)" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="hd_access" type="BOOLEAN" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="no_ads" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="premium_content" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="devices_allowed" type="INT" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="is_active" type="BOOLEAN" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="sort_order" type="INT" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="alter-users-add-tariff-fields" author="bekhruzbey">
+
+        <addColumn tableName="users">
+            <column name="tariff_id" type="UUID">
+                <constraints
+                        nullable="true"
+                        foreignKeyName="fk_users_tariff"
+                        references="tariffs(id)"/>
+            </column>
+        </addColumn>
+
+        <addColumn tableName="users">
+            <column name="tariff_expire_at" type="TIMESTAMP"/>
+        </addColumn>
+
+        <addColumn tableName="users">
+            <column name="phone_number" type="VARCHAR(20)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1776141817863-1" author="bekhruzbey">
+        <addColumn tableName="payment">
+            <column name="user_id" type="UUID">
+                <constraints
+                        nullable="false"
+                        foreignKeyName="fk_payment_user"
+                        references="users(id)"/>
+            </column>
+
+            <!-- Qaysi tarif -->
+            <column name="tariff_id" type="UUID">
+                <constraints
+                        nullable="false"
+                        foreignKeyName="fk_payment_tariff"
+                        references="tariffs(id)"/>
+            </column>
+
+            <!-- Obuna davri: MONTHLY | SIX_MONTH | YEARLY -->
+            <column name="period" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- To'lov tizimi: CLICK | PAYME | UZUM -->
+            <column name="provider" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- To'lov summasi -->
+            <column name="amount" type="DECIMAL(12, 2)" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- Holat: PENDING | CONFIRMED | FAILED | CANCELLED -->
+            <column name="payment_status" type="VARCHAR(20)" defaultValue="PENDING">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- Karta (faqat oxirgi 4 raqam) -->
+            <column name="card_last_four" type="VARCHAR(4)"/>
+            <column name="card_holder"    type="VARCHAR(100)"/>
+
+            <!-- SMS tasdiqlash uchun telefon -->
+            <column name="phone_number" type="VARCHAR(20)"/>
+
+            <!-- Click/Payme/Uzum dan kelgan tashqi ID -->
+            <column name="external_transaction_id" type="VARCHAR(200)"/>
+
+            <!-- Obuna muddati -->
+            <column name="subscription_start" type="TIMESTAMP"/>
+            <column name="subscription_end"   type="TIMESTAMP"/>
+
+            <!-- Xato bo'lsa sababi -->
+            <column name="failure_reason" type="TEXT"/>
+        </addColumn>
+
+        <dropColumn tableName="payment" columnName="card_number"/>
+
+        <createIndex tableName="payment" indexName="idx_payment_user_id">
+            <column name="user_id"/>
+        </createIndex>
+
+        <createIndex tableName="payment" indexName="idx_payment_tariff_id">
+            <column name="tariff_id"/>
+        </createIndex>
+
+        <createIndex tableName="payment" indexName="idx_payment_status">
+            <column name="status"/>
+        </createIndex>
+
+        <createIndex tableName="payment" indexName="idx_payment_created_at">
+            <column name="created_at"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1776142101471-1" author="bekhruzbey">
+        <createTable tableName="user_payment_history">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_payment_history"/>
+            </column>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="user_id" type="UUID">
+                <constraints
+                        nullable="false"
+                        foreignKeyName="fk_payment_history_user"
+                        references="users(id)"/>
+            </column>
+
+            <!-- Qaysi payment -->
+            <column name="payment_id" type="UUID">
+                <constraints
+                        nullable="false"
+                        foreignKeyName="fk_payment_history_payment"
+                        references="payment(id)"/>
+            </column>
+
+            <!-- Qaysi tarif -->
+            <column name="tariff_id" type="UUID">
+                <constraints
+                        nullable="false"
+                        foreignKeyName="fk_payment_history_tariff"
+                        references="tariffs(id)"/>
+            </column>
+
+            <!-- Snapshot: tarif nomi keyinchalik o'zgarsa ham saqlansin -->
+            <column name="tariff_name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- To'lov summasi -->
+            <column name="amount" type="DECIMAL(12, 2)" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- CLICK | PAYME | UZUM -->
+            <column name="provider" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- PENDING | CONFIRMED | FAILED | CANCELLED -->
+            <column name="payment_status" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- MONTHLY | SIX_MONTH | YEARLY -->
+            <column name="period" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- Obuna muddati -->
+            <column name="subscription_start" type="TIMESTAMP"/>
+            <column name="subscription_end"   type="TIMESTAMP"/>
+
+            <!-- Qo'shimcha izoh -->
+            <column name="note" type="TEXT"/>
+        </createTable>
+        <createIndex tableName="user_payment_history" indexName="idx_pay_hist_user_id">
+            <column name="user_id"/>
+        </createIndex>
+
+        <createIndex tableName="user_payment_history" indexName="idx_pay_hist_payment_id">
+            <column name="payment_id"/>
+        </createIndex>
+
+        <createIndex tableName="user_payment_history" indexName="idx_pay_hist_status">
+            <column name="payment_status"/>
+        </createIndex>
+
+        <createIndex tableName="user_payment_history" indexName="idx_pay_hist_created_at">
+            <column name="created_at"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1776142306717-1" author="bekhruzbey">
+        <createTable tableName="sms_verifications">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_sms_verifications"/>
+            </column>
+            <column name="created_by" type="BIGINT"/>
+            <column name="updated_by" type="BIGINT"/>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="payment_id" type="UUID">
+                <constraints
+                        nullable="false"
+                        foreignKeyName="fk_sms_verif_payment"
+                        references="payment(id)"/>
+            </column>
+
+            <!-- Telefon raqam -->
+            <column name="phone_number" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- 6 raqamli kod -->
+            <column name="code" type="VARCHAR(6)">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- Muddati (5 daqiqa) -->
+            <column name="expires_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- Ishlatildimi? -->
+            <column name="is_used" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- Necha marta noto'g'ri kiritildi (max 3) -->
+            <column name="attempts" type="INT" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createIndex tableName="sms_verifications" indexName="idx_sms_payment_id">
+            <column name="payment_id"/>
+        </createIndex>
+
+        <createIndex tableName="sms_verifications" indexName="idx_sms_is_used">
+            <column name="is_used"/>
+        </createIndex>
+
+        <createIndex tableName="sms_verifications" indexName="idx_sms_expires_at">
+            <column name="expires_at"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

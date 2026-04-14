@@ -40,7 +40,7 @@ public class SeasonService {
                 .orElseThrow(() -> new GenericNotFoundException("Kontent topilmadi: " + req.getContentId()));
 
         // Bir xil mavsum raqami bo'lmasligi kerak
-        if (seasonRepository.existsByContent_IdAndSeasonNumber(req.getContentId(), req.getSeasonNumber()))
+        if (seasonRepository.existsByContentIdAndSeasonNumber(req.getContentId(), String.valueOf(req.getSeasonNumber())))
             throw new AlreadyExistsException(
                     req.getSeasonNumber() + "-mavsum allaqachon mavjud"
             );
@@ -63,8 +63,8 @@ public class SeasonService {
 
         // Mavsum raqami o'zgaryaptimi va u allaqachon bormi?
         if (!season.getSeasonNumber().equals(req.getSeasonNumber()) &&
-                seasonRepository.existsByContent_IdAndSeasonNumber(
-                        season.getContent().getId(), req.getSeasonNumber()))
+                seasonRepository.existsByContentIdAndSeasonNumber(
+                        season.getContent().getId(), String.valueOf(req.getSeasonNumber())))
             throw new AlreadyExistsException(
                     req.getSeasonNumber() + "-mavsum allaqachon mavjud"
             );

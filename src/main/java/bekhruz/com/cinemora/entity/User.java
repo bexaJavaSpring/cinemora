@@ -4,9 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -61,6 +61,16 @@ public class User extends Auditable {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Builder.Default
     private List<WatchHistory> watchHistory = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tariff_id")
+    private Tariff tariff;
+
+    @Column(name = "tariff_expire_at")
+    private LocalDateTime tariffExpireAt;
+
+    @Column(name = "phone_number", length = 20)
+    private String phoneNumber;
 
     public enum UserRole {
         USER, MODERATOR, ADMIN
