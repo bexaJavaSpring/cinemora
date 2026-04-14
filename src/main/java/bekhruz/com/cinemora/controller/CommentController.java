@@ -23,9 +23,7 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-    // ── 1. KONTENT IZOHLARI (sahifalab) ──────────────────
-    // GET /api/v1/comments/content/5?page=0&size=10
-    // Faqat parent commentlar qaytadi (replies ichida)
+
     @GetMapping("/content/{contentId}")
     public ResponseEntity<Page<CommentResponse>> getByContent(
             @PathVariable UUID contentId,
@@ -36,17 +34,13 @@ public class CommentController {
         return ResponseEntity.ok(commentService.getByContent(contentId, pageable));
     }
 
-    // ── 2. BITTA IZOH ─────────────────────────────────────
-    // GET /api/v1/comments/15
+
     @GetMapping("/{id}")
     public ResponseEntity<CommentResponse> getById(@PathVariable UUID id) {
         return ResponseEntity.ok(commentService.getById(id));
     }
 
-    // ── 3. IZOH YOZISH (login kerak) ──────────────────────
-    // POST /api/v1/comments
-    // Body: { "contentId": 5, "text": "Zo'r kino!", "parentId": null }
-    // Javob yozish: { "contentId": 5, "text": "Rozi!", "parentId": 15 }
+
     @PostMapping
     public ResponseEntity<CommentResponse> create(
             @RequestBody CommentRequest request
@@ -54,8 +48,6 @@ public class CommentController {
         return ResponseEntity.status(201).body(commentService.create(request));
     }
 
-    // ── 4. IZOH TAHRIRLASH (faqat o'z izohini) ────────────
-    // PUT /api/v1/comments/15
     @PutMapping("/{id}")
     public ResponseEntity<CommentResponse> update(
             @PathVariable UUID id,
@@ -64,9 +56,6 @@ public class CommentController {
         return ResponseEntity.ok(commentService.update(id, request));
     }
 
-    // ── 5. IZOH O'CHIRISH ─────────────────────────────────
-    // DELETE /api/v1/comments/15
-    // User o'z izohini, Admin istalgan izohni o'chira oladi
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> delete(
             @PathVariable UUID id
@@ -75,16 +64,12 @@ public class CommentController {
         return ResponseEntity.ok(new ApiResponse(true, "Izoh o'chirildi"));
     }
 
-    // ── 6. LIKE BOSISH ────────────────────────────────────
-    // PATCH /api/v1/comments/15/like
     @PatchMapping("/{id}/like")
     public ResponseEntity<ApiResponse> like(@PathVariable UUID id) {
         int count = commentService.like(id);
         return ResponseEntity.ok(new ApiResponse(true, "Likes: " + count));
     }
 
-    // ── 7. ADMIN: IZOHNI BLOKLASH ─────────────────────────
-    // PATCH /api/v1/comments/15/toggle-active
     @PatchMapping("/{id}/toggle-active")
     public ResponseEntity<ApiResponse> toggleActive(@PathVariable UUID id) {
         boolean active = commentService.toggleActive(id);

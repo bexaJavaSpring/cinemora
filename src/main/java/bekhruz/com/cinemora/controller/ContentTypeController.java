@@ -19,37 +19,27 @@ public class ContentTypeController {
         this.contentTypeService = contentTypeService;
     }
 
-    // ── 1. BARCHASI ──────────────────────────────────────
-    // GET /api/v1/content-types
     @GetMapping
     public ResponseEntity<List<ContentTypeResponse>> getAll() {
         return ResponseEntity.ok(contentTypeService.getAll());
     }
 
-    // ── 2. ID ORQALI ─────────────────────────────────────
-    // GET /api/v1/content-types/1
     @GetMapping("/{id}")
     public ResponseEntity<ContentTypeResponse> getById(@PathVariable UUID id) {
         return ResponseEntity.ok(contentTypeService.getById(id));
     }
 
-    // ── 3. SLUG ORQALI ───────────────────────────────────
-    // GET /api/v1/content-types/slug/movie
+
     @GetMapping("/slug/{slug}")
     public ResponseEntity<ContentTypeResponse> getBySlug(@PathVariable String slug) {
         return ResponseEntity.ok(contentTypeService.getBySlug(slug));
     }
 
-    // ── 4. YANGI QO'SHISH (Admin) ─────────────────────────
-    // POST /api/v1/content-types
-    // Body: { "name": "Kino", "slug": "movie" }
     @PostMapping
     public ResponseEntity<ContentTypeResponse> create(@RequestBody ContentTypeRequest request) {
         return ResponseEntity.status(201).body(contentTypeService.create(request));
     }
 
-    // ── 5. TAHRIRLASH (Admin) ─────────────────────────────
-    // PUT /api/v1/content-types/1
     @PutMapping("/{id}")
     public ResponseEntity<ContentTypeResponse> update(
             @PathVariable UUID id,
@@ -58,8 +48,6 @@ public class ContentTypeController {
         return ResponseEntity.ok(contentTypeService.update(id, request));
     }
 
-    // ── 6. O'CHIRISH (Admin) ──────────────────────────────
-    // DELETE /api/v1/content-types/1
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> delete(@PathVariable UUID id) {
         contentTypeService.delete(id);

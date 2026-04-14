@@ -19,38 +19,27 @@ public class GenresController {
         this.genreService = genreService;
     }
 
-    // ── 1. BARCHA JANRLAR ────────────────────────────────
-    // GET /api/v1/genres
-    // Hamma ko'ra oladi (guest ham)
+
     @GetMapping
     public ResponseEntity<List<GenreResponse>> getAll() {
         return ResponseEntity.ok(genreService.getAll());
     }
 
-    // ── 2. ID ORQALI ─────────────────────────────────────
-    // GET /api/v1/genres/3
     @GetMapping("/{id}")
     public ResponseEntity<GenreResponse> getById(@PathVariable UUID id) {
         return ResponseEntity.ok(genreService.getById(id));
     }
 
-    // ── 3. SLUG ORQALI ───────────────────────────────────
-    // GET /api/v1/genres/slug/drama
     @GetMapping("/slug/{slug}")
     public ResponseEntity<GenreResponse> getBySlug(@PathVariable String slug) {
         return ResponseEntity.ok(genreService.getBySlug(slug));
     }
 
-    // ── 4. YANGI JANR QO'SHISH (Admin) ───────────────────
-    // POST /api/v1/genres
-    // Body: { "name": "Drama", "slug": "drama" }
     @PostMapping
     public ResponseEntity<GenreResponse> create(@RequestBody GenreRequest request) {
         return ResponseEntity.status(201).body(genreService.create(request));
     }
 
-    // ── 5. JANRNI TAHRIRLASH (Admin) ──────────────────────
-    // PUT /api/v1/genres/3
     @PutMapping("/{id}")
     public ResponseEntity<GenreResponse> update(
             @PathVariable UUID id,
@@ -59,8 +48,6 @@ public class GenresController {
         return ResponseEntity.ok(genreService.update(id, request));
     }
 
-    // ── 6. JANRNI O'CHIRISH (Admin) ───────────────────────
-    // DELETE /api/v1/genres/3
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> delete(@PathVariable UUID id) {
         genreService.delete(id);

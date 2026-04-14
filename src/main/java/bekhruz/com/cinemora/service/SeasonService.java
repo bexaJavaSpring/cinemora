@@ -21,19 +21,16 @@ public class SeasonService {
     private final SeasonRepository seasonRepository;
     private final ContentRepository contentRepository;
 
-    // ── Content bo'yicha barcha mavsum ────────────────────
     public List<SeasonResponse> getByContent(UUID contentId) {
         return seasonRepository
                 .findByContent_IdOrderBySeasonNumberAsc(contentId)
                 .stream().map(this::toResponse).toList();
     }
 
-    // ── ID bo'yicha ───────────────────────────────────────
     public SeasonResponse getById(UUID id) {
         return toResponse(findById(id));
     }
 
-    // ── Yaratish ─────────────────────────────────────────
     @Transactional
     public SeasonResponse create(SeasonRequest req) {
         Content content = contentRepository.findById(req.getContentId())
@@ -56,7 +53,6 @@ public class SeasonService {
         return toResponse(seasonRepository.save(season));
     }
 
-    // ── Tahrirlash ────────────────────────────────────────
     @Transactional
     public SeasonResponse update(UUID id, SeasonRequest req) {
         Season season = findById(id);
@@ -77,7 +73,6 @@ public class SeasonService {
         return toResponse(seasonRepository.save(season));
     }
 
-    // ── O'chirish ─────────────────────────────────────────
     @Transactional
     public void delete(UUID id) {
         if (!seasonRepository.existsById(id))
@@ -85,7 +80,6 @@ public class SeasonService {
         seasonRepository.deleteById(id);
     }
 
-    // ── Helper ────────────────────────────────────────────
     private Season findById(UUID id) {
         return seasonRepository.findById(id)
                 .orElseThrow(() -> new GenericNotFoundException("Mavsum topilmadi: " + id));

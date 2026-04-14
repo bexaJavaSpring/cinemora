@@ -34,10 +34,6 @@ public class AuthController {
         return ResponseEntity.ok(authService.getMe());
     }
 
-    // ── 4. LOGOUT ────────────────────────────────────────
-    // POST /api/v1/auth/logout
-    // JWT stateless bo'lgani uchun frontend token ni o'chiradi
-    // Backend tomonda faqat 200 qaytaradi
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse> logout() {
         return ResponseEntity.ok(new ApiResponse(true, "Muvaffaqiyatli chiqildi"));
