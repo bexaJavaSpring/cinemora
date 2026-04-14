@@ -27,19 +27,16 @@ public class CommentService {
     private final ContentRepository contentRepository;
     private final UserSession userSession;
 
-    // ── Kontent izohlari (faqat parent, replies ichida) ───
     public Page<CommentResponse> getByContent(UUID contentId, Pageable pageable) {
         return commentRepository
                 .findByContent_IdAndParentIsNullAndIsActiveTrue(contentId, pageable)
                 .map(this::toResponse);
     }
 
-    // ── ID bo'yicha ───────────────────────────────────────
     public CommentResponse getById(UUID id) {
         return toResponse(findById(id));
     }
 
-    // ── Izoh yozish ───────────────────────────────────────
     @Transactional
     public CommentResponse create(CommentRequest req) {
         CustomUserDetails currentUser = userSession.getCurrentUser();
@@ -64,7 +61,6 @@ public class CommentService {
         return toResponse(commentRepository.save(comment));
     }
 
-    // ── Tahrirlash (faqat o'z izohini) ────────────────────
     @Transactional
     public CommentResponse update(UUID id, CommentRequest req) {
         CustomUserDetails currentUser = userSession.getCurrentUser();
@@ -81,7 +77,6 @@ public class CommentService {
         return toResponse(commentRepository.save(comment));
     }
 
-    // ── O'chirish ─────────────────────────────────────────
     @Transactional
     public void delete(UUID id) {
         CustomUserDetails currentUser = userSession.getCurrentUser();
@@ -94,7 +89,7 @@ public class CommentService {
         commentRepository.deleteById(id);
     }
 
-    // ── Like ─────────────────────────────────────────────
+
     @Transactional
     public int like(UUID id) {
         Comment comment = findById(id);
@@ -110,7 +105,7 @@ public class CommentService {
         return comment.getIsActive();
     }
 
-    // ── Helper ────────────────────────────────────────────
+
     private Comment findById(UUID id) {
         return commentRepository.findById(id)
                 .orElseThrow(() -> new GenericNotFoundException("Izoh topilmadi: " + id));

@@ -29,7 +29,7 @@ public class WatchHistoryService {
     private final EpisodeRepository episodeRepository;
     private final UserSession userSession;
 
-    // ── Ko'rish tarixi (sahifalab) ────────────────────────
+
     public Page<WatchHistoryResponse> getMyHistory(Pageable pageable) {
         CustomUserDetails currentUser = userSession.getCurrentUser();
         return watchHistoryRepository
@@ -37,7 +37,7 @@ public class WatchHistoryService {
                 .map(this::toResponse);
     }
 
-    // ── Bitta kontent tarixi ──────────────────────────────
+
     public WatchHistoryResponse getByContent(UUID contentId) {
         CustomUserDetails currentUser = userSession.getCurrentUser();
         WatchHistory wh = watchHistoryRepository
@@ -79,7 +79,7 @@ public class WatchHistoryService {
         return toResponse(watchHistoryRepository.save(wh));
     }
 
-    // ── O'chirish ─────────────────────────────────────────
+
     @Transactional
     public void delete(UUID id) {
         CustomUserDetails currentUser = userSession.getCurrentUser();
@@ -98,7 +98,7 @@ public class WatchHistoryService {
         watchHistoryRepository.deleteAllByUser_Id(currentUser.getUserId());
     }
 
-    // ── Helper ────────────────────────────────────────────
+
     private WatchHistoryResponse toResponse(WatchHistory wh) {
         WatchHistoryResponse res = new WatchHistoryResponse();
         res.setId(wh.getId());

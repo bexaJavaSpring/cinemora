@@ -21,17 +21,15 @@ public class ActorsService {
         this.actorRepository = actorRepository;
     }
 
-    // ── Barchasi (sahifalab) ──────────────────────────────
+
     public Page<ActorResponse> getAll(Pageable pageable) {
         return actorRepository.findAll(pageable).map(this::toResponse);
     }
 
-    // ── ID bo'yicha ───────────────────────────────────────
     public ActorResponse getById(UUID id) {
         return toResponse(findById(id));
     }
 
-    // ── Qidiruv ───────────────────────────────────────────
     public List<ActorResponse> search(String query) {
         return actorRepository
                 .findByFullNameContainingIgnoreCaseOrderByFullNameAsc(query)
@@ -40,7 +38,6 @@ public class ActorsService {
                 .toList();
     }
 
-    // ── Yaratish ─────────────────────────────────────────
     @Transactional
     public ActorResponse create(ActorRequest request) {
         Actors actor = Actors.builder()
@@ -52,7 +49,6 @@ public class ActorsService {
         return toResponse(actorRepository.save(actor));
     }
 
-    // ── Tahrirlash ────────────────────────────────────────
     @Transactional
     public ActorResponse update(UUID id, ActorRequest request) {
         Actors actor = findById(id);
@@ -63,7 +59,6 @@ public class ActorsService {
         return toResponse(actorRepository.save(actor));
     }
 
-    // ── O'chirish ─────────────────────────────────────────
     @Transactional
     public void delete(UUID id) {
         if (!actorRepository.existsById(id))
@@ -71,7 +66,7 @@ public class ActorsService {
         actorRepository.deleteById(id);
     }
 
-    // ── Helper ────────────────────────────────────────────
+
     private Actors findById(UUID id) {
         return actorRepository.findById(id)
                 .orElseThrow(() -> new GenericNotFoundException("Aktyor topilmadi: " + id));

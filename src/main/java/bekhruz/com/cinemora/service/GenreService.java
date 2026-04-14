@@ -19,7 +19,7 @@ public class GenreService {
 
     private final GenresRepository genreRepository;
 
-    // ── Barchasi ─────────────────────────────────────────
+
     public List<GenreResponse> getAll() {
         return genreRepository.findAllByOrderByNameAsc()
                 .stream()
@@ -27,19 +27,19 @@ public class GenreService {
                 .toList();
     }
 
-    // ── ID bo'yicha ───────────────────────────────────────
+
     public GenreResponse getById(UUID id) {
         return toResponse(findById(id));
     }
 
-    // ── Slug bo'yicha ─────────────────────────────────────
+
     public GenreResponse getBySlug(String slug) {
         Genres genre = genreRepository.findBySlug(slug)
                 .orElseThrow(() -> new GenericNotFoundException("Janr topilmadi: " + slug));
         return toResponse(genre);
     }
 
-    // ── Yaratish ─────────────────────────────────────────
+
     @Transactional
     public GenreResponse create(GenreRequest request) {
         // Slug takrorlanmasligini tekshirish
@@ -58,7 +58,7 @@ public class GenreService {
         return toResponse(genreRepository.save(genre));
     }
 
-    // ── Tahrirlash ────────────────────────────────────────
+
     @Transactional
     public GenreResponse update(UUID id, GenreRequest request) {
         Genres genre = findById(id);
@@ -79,7 +79,7 @@ public class GenreService {
         return toResponse(genreRepository.save(genre));
     }
 
-    // ── O'chirish ─────────────────────────────────────────
+
     @Transactional
     public void delete(UUID id) {
         if (!genreRepository.existsById(id))
@@ -87,7 +87,7 @@ public class GenreService {
         genreRepository.deleteById(id);
     }
 
-    // ── Helper metodlar ───────────────────────────────────
+
     private Genres findById(UUID id) {
         return genreRepository.findById(id)
                 .orElseThrow(() -> new GenericNotFoundException("Janr topilmadi: " + id));

@@ -24,26 +24,22 @@ public class EpisodeService {
     private final ContentRepository contentRepository;
     private final SeasonRepository seasonRepository;
 
-    // ── Content bo'yicha barcha epizodlar ─────────────────
     public List<EpisodeResponse> getByContent(UUID contentId) {
         return episodeRepository
                 .findByContent_IdOrderBySeasonSeasonNumberAscEpisodeNumberAsc(contentId)
                 .stream().map(this::toResponse).toList();
     }
 
-    // ── Mavsum bo'yicha epizodlar ─────────────────────────
     public List<EpisodeResponse> getBySeason(UUID seasonId) {
         return episodeRepository
                 .findBySeason_IdOrderByEpisodeNumberAsc(seasonId)
                 .stream().map(this::toResponse).toList();
     }
 
-    // ── ID bo'yicha ───────────────────────────────────────
     public EpisodeResponse getById(UUID id) {
         return toResponse(findById(id));
     }
 
-    // ── Yaratish ─────────────────────────────────────────
     @Transactional
     public EpisodeResponse create(EpisodeRequest req) {
         Content content = contentRepository.findById(req.getContentId())
@@ -66,7 +62,7 @@ public class EpisodeService {
         return toResponse(episodeRepository.save(episode));
     }
 
-    // ── Tahrirlash ────────────────────────────────────────
+
     @Transactional
     public EpisodeResponse update(UUID id, EpisodeRequest req) {
         Episode episode = findById(id);
@@ -78,7 +74,7 @@ public class EpisodeService {
         return toResponse(episodeRepository.save(episode));
     }
 
-    // ── O'chirish ─────────────────────────────────────────
+
     @Transactional
     public void delete(UUID id) {
         episodeRepository.deleteById(id);
@@ -91,7 +87,7 @@ public class EpisodeService {
         episode.setViewCount(episode.getViewCount() + 1);
     }
 
-    // ── Helper ────────────────────────────────────────────
+
     private Episode findById(UUID id) {
         return episodeRepository.findById(id)
                 .orElseThrow(() -> new GenericNotFoundException("Epizod topilmadi: " + id));

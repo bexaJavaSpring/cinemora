@@ -44,14 +44,13 @@ public class ContentService {
         return contentMapper.toResponse(content);
     }
 
-    // ── 4. Kino turiga qarab ─────────────────────────────────
     public Page<ContentResponse> getByType(String typeSlug, Pageable pageable) {
         return contentRepository
                 .findByContentType_SlugAndStatus(typeSlug, Status.ACTIVE, pageable)
                 .map(contentMapper::toResponse);
     }
 
-    // ── 5. Janrga qarab ─────────────────────────────────────
+
     public Page<ContentResponse> getByGenre(String genreSlug, Pageable pageable) {
         return contentRepository
                 .findByGenres_SlugAndStatus(genreSlug, Status.ACTIVE, pageable)
@@ -75,7 +74,6 @@ public class ContentService {
                 .getContent();
     }
 
-    // ── 8. Top (IMDB reytingga qarab) ────────────────────────
     public List<ContentResponse> getTop(int limit) {
         Pageable pageable = PageRequest.of(0, limit, Sort.by("imdbRating").descending());
         return contentRepository
@@ -129,7 +127,6 @@ public class ContentService {
     // ADMIN METHODLAR
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-    // ── 13. Yangi kontent yaratish ───────────────────────────
     @Transactional
     public ContentResponse create(ContentRequest request) {
         Content content = contentMapper.toEntity(request);
@@ -140,7 +137,6 @@ public class ContentService {
         return contentMapper.toResponse(contentRepository.save(content));
     }
 
-    // ── 14. Tahrirlash ───────────────────────────────────────
     @Transactional
     public ContentResponse update(UUID id, ContentRequest request) {
         Content content = contentRepository.findById(id)
@@ -149,7 +145,6 @@ public class ContentService {
         return contentMapper.toResponse(contentRepository.save(content));
     }
 
-    // ── 15. O'chirish ────────────────────────────────────────
     @Transactional
     public void delete(UUID id) {
         if (!contentRepository.existsById(id))

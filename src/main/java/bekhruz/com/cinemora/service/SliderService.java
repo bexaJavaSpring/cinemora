@@ -20,26 +20,25 @@ public class SliderService {
     private final SliderRepository sliderRepository;
     private final ContentRepository contentRepository;
 
-    // ── Faol sliderlar ────────────────────────────────────
     public List<SliderResponse> getActive() {
         return sliderRepository
                 .findByIsActiveTrueOrderBySortOrderAsc()
                 .stream().map(this::toResponse).toList();
     }
 
-    // ── Barchasi (Admin) ──────────────────────────────────
+
     public List<SliderResponse> getAll() {
         return sliderRepository
                 .findAllByOrderBySortOrderAsc()
                 .stream().map(this::toResponse).toList();
     }
 
-    // ── ID bo'yicha ───────────────────────────────────────
+
     public SliderResponse getById(UUID id) {
         return toResponse(findById(id));
     }
 
-    // ── Yaratish ─────────────────────────────────────────
+
     @Transactional
     public SliderResponse create(SliderRequest req) {
         Slider slider = Slider.builder()
@@ -61,7 +60,7 @@ public class SliderService {
         return toResponse(sliderRepository.save(slider));
     }
 
-    // ── Tahrirlash ────────────────────────────────────────
+
     @Transactional
     public SliderResponse update(UUID id, SliderRequest req) {
         Slider slider = findById(id);
@@ -84,7 +83,7 @@ public class SliderService {
         return toResponse(sliderRepository.save(slider));
     }
 
-    // ── O'chirish ─────────────────────────────────────────
+
     @Transactional
     public void delete(UUID id) {
         sliderRepository.deleteById(id);
@@ -105,7 +104,7 @@ public class SliderService {
         slider.setSortOrder(order);
     }
 
-    // ── Helper ────────────────────────────────────────────
+
     private Slider findById(UUID id) {
         return sliderRepository.findById(id)
                 .orElseThrow(() -> new GenericNotFoundException("Slider topilmadi: " + id));

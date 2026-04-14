@@ -18,7 +18,6 @@ import java.util.UUID;
 public class CountryService {
     private final CountryRepository countryRepository;
 
-    // ── Barchasi ─────────────────────────────────────────
     public List<CountryResponse> getAll() {
         return countryRepository.findAllByOrderByNameAsc()
                 .stream()
@@ -26,19 +25,16 @@ public class CountryService {
                 .toList();
     }
 
-    // ── ID bo'yicha ───────────────────────────────────────
     public CountryResponse getById(UUID id) {
         return toResponse(findById(id));
     }
 
-    // ── Code bo'yicha ─────────────────────────────────────
     public CountryResponse getByCode(String code) {
         Country country = countryRepository.findByCodeIgnoreCase(code)
                 .orElseThrow(() -> new GenericNotFoundException("Mamlakat topilmadi: " + code));
         return toResponse(country);
     }
 
-    // ── Yaratish ─────────────────────────────────────────
     @Transactional
     public CountryResponse create(CountryRequest request) {
         if (countryRepository.existsByCodeIgnoreCase(request.getCode()))
@@ -54,7 +50,6 @@ public class CountryService {
         return toResponse(countryRepository.save(country));
     }
 
-    // ── Tahrirlash ────────────────────────────────────────
     @Transactional
     public CountryResponse update(UUID id, CountryRequest request) {
         Country country = findById(id);
@@ -73,7 +68,7 @@ public class CountryService {
         return toResponse(countryRepository.save(country));
     }
 
-    // ── O'chirish ─────────────────────────────────────────
+
     @Transactional
     public void delete(UUID id) {
         if (!countryRepository.existsById(id))
@@ -81,7 +76,7 @@ public class CountryService {
         countryRepository.deleteById(id);
     }
 
-    // ── Helper ────────────────────────────────────────────
+
     private Country findById(UUID id) {
         return countryRepository.findById(id)
                 .orElseThrow(() -> new GenericNotFoundException("Mamlakat topilmadi: " + id));

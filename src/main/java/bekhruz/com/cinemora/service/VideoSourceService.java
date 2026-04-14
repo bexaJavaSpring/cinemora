@@ -23,26 +23,26 @@ public class VideoSourceService {
     private final ContentRepository contentRepository;
     private final EpisodeRepository episodeRepository;
 
-    // ── Kontent video manbalari ───────────────────────────
+
     public List<VideoSourceResponse> getByContent(UUID contentId) {
         return videoSourceRepository
                 .findByContent_IdAndIsActiveTrueOrderBySortOrderAsc(contentId)
                 .stream().map(this::toResponse).toList();
     }
 
-    // ── Epizod video manbalari ────────────────────────────
+
     public List<VideoSourceResponse> getByEpisode(UUID episodeId) {
         return videoSourceRepository
                 .findByEpisode_IdAndIsActiveTrueOrderBySortOrderAsc(episodeId)
                 .stream().map(this::toResponse).toList();
     }
 
-    // ── ID bo'yicha ───────────────────────────────────────
+
     public VideoSourceResponse getById(UUID id) {
         return toResponse(findById(id));
     }
 
-    // ── Yaratish ─────────────────────────────────────────
+
     @Transactional
     public VideoSourceResponse create(VideoSourceRequest req) {
         VideoSource vs = VideoSource.builder()
@@ -71,7 +71,7 @@ public class VideoSourceService {
         return toResponse(videoSourceRepository.save(vs));
     }
 
-    // ── Tahrirlash ────────────────────────────────────────
+
     @Transactional
     public VideoSourceResponse update(UUID id, VideoSourceRequest req) {
         VideoSource vs = findById(id);
@@ -86,7 +86,7 @@ public class VideoSourceService {
         return toResponse(videoSourceRepository.save(vs));
     }
 
-    // ── O'chirish ─────────────────────────────────────────
+
     @Transactional
     public void delete(UUID id) {
         if (!videoSourceRepository.existsById(id))
@@ -102,7 +102,7 @@ public class VideoSourceService {
         return vs.getIsActive();
     }
 
-    // ── Helper ────────────────────────────────────────────
+
     private VideoSource findById(UUID id) {
         return videoSourceRepository.findById(id)
                 .orElseThrow(() -> new GenericNotFoundException("Video manbaa topilmadi: " + id));
