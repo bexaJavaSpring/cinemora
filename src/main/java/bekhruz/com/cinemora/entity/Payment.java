@@ -1,10 +1,7 @@
 package bekhruz.com.cinemora.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -20,6 +17,7 @@ import java.time.LocalDateTime;
         @Index(name = "idx_payment_status", columnList = "payment_status"),
         @Index(name = "idx_payment_created_at", columnList = "created_at")
 })
+@Builder
 public class Payment extends Auditable {
 
     @ManyToOne(fetch = FetchType.LAZY)
