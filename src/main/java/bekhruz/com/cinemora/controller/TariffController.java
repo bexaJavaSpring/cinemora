@@ -7,6 +7,7 @@ import bekhruz.com.cinemora.dto.tariff.TariffResponse;
 import bekhruz.com.cinemora.service.TariffService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,12 +39,14 @@ public class TariffController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<TariffResponse> create(@Valid @RequestBody TariffRequest request) {
         return ResponseEntity.status(201).body(tariffService.create(request));
     }
 
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<TariffResponse> update(
             @PathVariable UUID id,
             @Valid @RequestBody TariffRequest request
@@ -52,6 +55,7 @@ public class TariffController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> delete(@PathVariable UUID id) {
         tariffService.delete(id);
         return ResponseEntity.ok(new ApiResponse(true, "Tarif o'chirildi"));
@@ -65,6 +69,7 @@ public class TariffController {
     }
 
     @PatchMapping("/attach")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> attachToUser(
             @RequestBody TariffAttachRequest request
     ) {

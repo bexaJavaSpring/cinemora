@@ -5,6 +5,7 @@ import bekhruz.com.cinemora.dto.videosource.VideoSourceRequest;
 import bekhruz.com.cinemora.dto.videosource.VideoSourceResponse;
 import bekhruz.com.cinemora.service.VideoSourceService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,11 +38,13 @@ public class VideoSourceController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<VideoSourceResponse> create(@RequestBody VideoSourceRequest request) {
         return ResponseEntity.status(201).body(videoSourceService.create(request));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<VideoSourceResponse> update(
             @PathVariable UUID id,
             @RequestBody VideoSourceRequest request
@@ -50,6 +53,7 @@ public class VideoSourceController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> delete(@PathVariable UUID id) {
         videoSourceService.delete(id);
         return ResponseEntity.ok(new ApiResponse(true, "Video manbaa o'chirildi"));

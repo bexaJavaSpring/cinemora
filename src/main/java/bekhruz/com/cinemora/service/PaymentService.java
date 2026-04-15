@@ -298,7 +298,7 @@ public class PaymentService {
         saveHistory(payment, reason);
     }
 
-    // ── Helper: PaymentHistory yozish ─────────────────────
+
     private void saveHistory(Payment payment, String note) {
         UserPaymentHistory history = UserPaymentHistory.builder()
                 .user(payment.getUser())
@@ -316,13 +316,13 @@ public class PaymentService {
         paymentHistoryRepository.save(history);
     }
 
-    // ── Helper: Payment topish ────────────────────────────
+
     private Payment findPayment(UUID paymentId) {
         return paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new GenericNotFoundException("To'lov topilmadi: " + paymentId));
     }
 
-    // ── Mapper: Payment → Response ────────────────────────
+
     private PaymentResponse toPaymentResponse(Payment p) {
         PaymentResponse res = new PaymentResponse();
         res.setId(p.getId());
@@ -340,7 +340,7 @@ public class PaymentService {
         return res;
     }
 
-    // ── Mapper: PaymentHistory → Response ─────────────────
+
     private PaymentHistoryResponse toHistoryResponse(UserPaymentHistory h) {
         PaymentHistoryResponse res = new PaymentHistoryResponse();
         res.setId(h.getId());
@@ -358,8 +358,6 @@ public class PaymentService {
         return res;
     }
 
-    // ── Helper: Telefon raqamni yashirish ─────────────────
-    // +998901234567 → +99890***4567
     private String maskPhone(String phone) {
         if (phone == null || phone.length() < 7) return phone;
         return phone.substring(0, 6) + "***" + phone.substring(phone.length() - 4);

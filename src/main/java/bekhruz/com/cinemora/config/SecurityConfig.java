@@ -34,6 +34,7 @@ public class SecurityConfig {
             "/webjars/**",
             "/webjars",
             "/auth/login",
+            "/auth/register",
             "/contents/**",
             "/contents"
     };

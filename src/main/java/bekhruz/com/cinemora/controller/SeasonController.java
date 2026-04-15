@@ -5,6 +5,7 @@ import bekhruz.com.cinemora.dto.season.SeasonRequest;
 import bekhruz.com.cinemora.dto.season.SeasonResponse;
 import bekhruz.com.cinemora.service.SeasonService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,11 +32,13 @@ public class SeasonController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<SeasonResponse> create(@RequestBody SeasonRequest request) {
         return ResponseEntity.status(201).body(seasonService.create(request));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<SeasonResponse> update(
             @PathVariable UUID id,
             @RequestBody SeasonRequest request
@@ -44,6 +47,7 @@ public class SeasonController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> delete(@PathVariable UUID id) {
         seasonService.delete(id);
         return ResponseEntity.ok(new ApiResponse(true, "Mavsum o'chirildi"));

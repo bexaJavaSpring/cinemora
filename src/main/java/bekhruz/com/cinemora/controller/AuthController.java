@@ -7,6 +7,7 @@ import bekhruz.com.cinemora.dto.response.ApiResponse;
 import bekhruz.com.cinemora.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -30,11 +31,13 @@ public class AuthController {
     }
 
     @GetMapping("/me")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<MeResponse> me() {
         return ResponseEntity.ok(authService.getMe());
     }
 
     @PostMapping("/logout")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse> logout() {
         return ResponseEntity.ok(new ApiResponse(true, "Muvaffaqiyatli chiqildi"));
     }

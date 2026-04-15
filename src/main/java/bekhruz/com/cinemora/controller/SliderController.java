@@ -5,6 +5,7 @@ import bekhruz.com.cinemora.dto.slider.SliderRequest;
 import bekhruz.com.cinemora.dto.slider.SliderResponse;
 import bekhruz.com.cinemora.service.SliderService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,6 +37,7 @@ public class SliderController {
     }
 
     @PostMapping()
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<SliderResponse> create(
             @RequestPart("data") SliderRequest request
     ) {
@@ -43,6 +45,7 @@ public class SliderController {
     }
 
     @PutMapping(value = "/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<SliderResponse> update(
             @PathVariable UUID id,
             @RequestPart("data") SliderRequest request) {
@@ -50,6 +53,7 @@ public class SliderController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> delete(@PathVariable UUID id) {
         sliderService.delete(id);
         return ResponseEntity.ok(new ApiResponse(true, "Slider o'chirildi"));
@@ -62,6 +66,7 @@ public class SliderController {
     }
 
     @PatchMapping("/{id}/sort")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> updateSort(
             @PathVariable UUID id,
             @RequestParam Integer order

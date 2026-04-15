@@ -5,6 +5,7 @@ import bekhruz.com.cinemora.dto.genre.GenreResponse;
 import bekhruz.com.cinemora.dto.response.ApiResponse;
 import bekhruz.com.cinemora.service.GenreService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,11 +37,13 @@ public class GenresController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<GenreResponse> create(@RequestBody GenreRequest request) {
         return ResponseEntity.status(201).body(genreService.create(request));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<GenreResponse> update(
             @PathVariable UUID id,
             @RequestBody GenreRequest request
@@ -49,6 +52,7 @@ public class GenresController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> delete(@PathVariable UUID id) {
         genreService.delete(id);
         return ResponseEntity.ok(new ApiResponse(true, "Janr o'chirildi"));

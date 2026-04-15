@@ -5,6 +5,7 @@ import bekhruz.com.cinemora.dto.country.CountryResponse;
 import bekhruz.com.cinemora.dto.response.ApiResponse;
 import bekhruz.com.cinemora.service.CountryService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/countries")
+@PreAuthorize("hasRole('ADMIN')")
 public class CountryController {
 
     private final CountryService countryService;

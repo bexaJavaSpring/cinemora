@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -135,6 +136,7 @@ public class ContentController {
 
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ContentResponse> create(
             @RequestBody ContentRequest request
     ) {
@@ -142,6 +144,7 @@ public class ContentController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ContentResponse> update(
             @PathVariable UUID id,
             @RequestBody ContentRequest request
@@ -150,6 +153,7 @@ public class ContentController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> delete(@PathVariable UUID id) {
         contentService.delete(id);
         return ResponseEntity.ok(new ApiResponse(true, "Kontent o'chirildi"));
@@ -157,6 +161,7 @@ public class ContentController {
 
 
     @PatchMapping("/{id}/status")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> changeStatus(
             @PathVariable UUID id,
             @RequestParam String status
